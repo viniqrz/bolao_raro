@@ -1,7 +1,7 @@
 {
-  "name": "semana2",
-  "version": "1.0.0",
-  "description": "Geometric Figures",
+  "name": "bolao-raro-academy",
+  "version": "1.2.2",
+  "description": "API para bolao do Campeonato Brasileiro",
   "main": "build/index.js",
   "scripts": {
     "compile": "npx tsc",

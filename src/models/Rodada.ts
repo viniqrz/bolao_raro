@@ -22,11 +22,12 @@ export default class Rodada {
   }
 
   public getHorarioLimiteAposta(): Date {
+    const indexDate = new Date("2030, 01, 01").toISOString() as unknown;
     return this.jogos.reduce((acc, cur) => {
       const dataHora = cur.getDataHora();
       if (dataHora <= acc) return dataHora;
       return acc;
-    }, new Date());
+    }, indexDate as Date);
   }
 
   getNumeroRodada(): number {

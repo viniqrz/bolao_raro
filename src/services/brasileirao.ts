@@ -4,7 +4,7 @@ import Rodada from "../models/Rodada";
 
 import APIBrasileirao from "../clients/brasileirao";
 
-import { APITime } from "../clients/brasileirao";
+import { APITime } from "../@types/api/brasileirao";
 
 import JSONTimesRepository from "../repositories/JSONTimesRepository";
 import JSONRodadasRepository from "../repositories/JSONrodadasRepository";
