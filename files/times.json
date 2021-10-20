@@ -1,102 +1,122 @@
 [
   {
-    "id": 1,
-    "nome": "America",
-    "estado": "MG"
-  },
-  {
-    "id": 2,
-    "nome": "Athletico Paranaense",
-    "estado": "PR"
-  },
-  {
-    "id": 3,
-    "nome": "Atlético Mineiro",
-    "estado": "MG"
-  },
-  {
-    "id": 4,
-    "nome": "Atlético",
-    "estado": "GO"
-  },
-  {
-    "id": 5,
-    "nome": "Bahia",
-    "estado": "BA"
-  },
-  {
-    "id": 6,
-    "nome": "Ceará",
-    "estado": "CE"
-  },
-  {
-    "id": 7,
-    "nome": "Chapecoense",
-    "estado": "SC"
-  },
-  {
-    "id": 8,
-    "nome": "Corinthians",
-    "estado": "SP"
-  },
-  {
-    "id": 9,
-    "nome": "Cuiabá",
-    "estado": "MT"
-  },
-  {
-    "id": 10,
-    "nome": "Flamengo",
-    "estado": "RJ"
-  },
-  {
-    "id": 11,
-    "nome": "Fluminense",
-    "estado": "RJ"
-  },
-  {
-    "id": 12,
-    "nome": "Fortaleza",
-    "estado": "CE"
-  },
-  {
-    "id": 13,
-    "nome": "Grêmio",
-    "estado": "RS"
-  },
-  {
-    "id": 14,
-    "nome": "Internacional",
-    "estado": "RS"
-  },
-  {
-    "id": 15,
-    "nome": "Juventude",
-    "estado": "RS"
-  },
-  {
-    "id": 16,
-    "nome": "Palmeiras",
-    "estado": "SP"
-  },
-  {
-    "id": 17,
-    "nome": "Red Bull Bragantino",
-    "estado": "SP"
+    "id": 30,
+    "nome": "Atlético-MG",
+    "sigla": "CAM",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999ca6bfd30.svg"
   },
   {
     "id": 18,
-    "nome": "Santos",
-    "estado": "SP"
+    "nome": "Flamengo",
+    "sigla": "FLA",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999c95084cb.svg"
   },
   {
-    "id": 19,
-    "nome": "Sport",
-    "estado": "PE"
+    "id": 131,
+    "nome": "Fortaleza",
+    "sigla": "FOR",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999ddaa261b.svg"
   },
   {
-    "id": 20,
+    "id": 64,
+    "nome": "Bragantino",
+    "sigla": "BGT",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999d770dbb2.svg"
+  },
+  {
+    "id": 56,
+    "nome": "Palmeiras",
+    "sigla": "PAL",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999ccc90039.svg"
+  },
+  {
+    "id": 65,
+    "nome": "Corinthians",
+    "sigla": "COR",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999d7ab48fa.svg"
+  },
+  {
+    "id": 44,
+    "nome": "Internacional",
+    "sigla": "INT",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999cbb0b297.svg"
+  },
+  {
+    "id": 185,
+    "nome": "Athletico-PR",
+    "sigla": "CAP",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999e2864a27.svg"
+  },
+  {
+    "id": 204,
+    "nome": "Cuiabá",
+    "sigla": "CUI",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999e4424264.svg"
+  },
+  {
+    "id": 26,
+    "nome": "Fluminense",
+    "sigla": "FLU",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999ca0e01e3.svg"
+  },
+  {
+    "id": 98,
+    "nome": "Atlético-GO",
+    "sigla": "ACG",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999db078911.svg"
+  },
+  {
+    "id": 33,
+    "nome": "América-MG",
+    "sigla": "AMG",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999cac0b5cc.svg"
+  },
+  {
+    "id": 57,
     "nome": "São Paulo",
-    "estado": "SP"
+    "sigla": "SAO",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999ccdc1656.svg"
+  },
+  {
+    "id": 105,
+    "nome": "Ceará",
+    "sigla": "CEA",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999dba767ba.svg"
+  },
+  {
+    "id": 43,
+    "nome": "Juventude",
+    "sigla": "JUV",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999cb997a01.svg"
+  },
+  {
+    "id": 63,
+    "nome": "Santos",
+    "sigla": "SAN",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999d7525121.svg"
+  },
+  {
+    "id": 68,
+    "nome": "Bahia",
+    "sigla": "BAH",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999d8090849.svg"
+  },
+  {
+    "id": 79,
+    "nome": "Sport",
+    "sigla": "SPO",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999d9173231.svg"
+  },
+  {
+    "id": 45,
+    "nome": "Grêmio",
+    "sigla": "GRE",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999cbc411b2.svg"
+  },
+  {
+    "id": 5,
+    "nome": "Chapecoense",
+    "sigla": "CHA",
+    "escudo": "https://apifutebol.s3.sa-east-1.amazonaws.com/escudos/5f999c82dc52e.svg"
   }
 ]

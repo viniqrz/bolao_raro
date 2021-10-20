@@ -8,7 +8,8 @@ const TIMES_FILE_PATH = "./files/times.json";
 type TimeFile = {
   id: number;
   nome: string;
-  estado: string;
+  sigla: string;
+  escudo: string;
 };
 
 export default class JSONTimesRepository implements TimesRepository {
@@ -25,7 +26,7 @@ export default class JSONTimesRepository implements TimesRepository {
       .then((fileContent: Buffer) => {
         const timesSemClasse = JSON.parse(fileContent.toString()) as TimeFile[];
         return timesSemClasse.map(
-          ({ id, nome, estado }) => new Time(id, nome, estado)
+          ({ id, nome, sigla, escudo }) => new Time(id, nome, sigla, escudo)
         );
       })
       .catch((error: any) => {
@@ -49,7 +50,7 @@ export default class JSONTimesRepository implements TimesRepository {
 
         if (!time) throw new Error("Time nao existe");
 
-        return new Time(time.id, time.nome, time.estado);
+        return new Time(time.id, time.nome, time.sigla, time.escudo);
       })
       .catch((error: any) => {
         if (error instanceof Error) {
@@ -77,7 +78,7 @@ export default class JSONTimesRepository implements TimesRepository {
       .then((fileContent: Buffer) => {
         const timesSemClasse = JSON.parse(fileContent.toString()) as TimeFile[];
         return timesSemClasse.map(
-          ({ id, nome, estado }) => new Time(id, nome, estado)
+          ({ id, nome, sigla, escudo }) => new Time(id, nome, sigla, escudo)
         );
       })
       .then((times) => {
@@ -105,23 +106,8 @@ export default class JSONTimesRepository implements TimesRepository {
       }
     };
 
-    return readFile(this.timesFilePath, { encoding: "utf8" })
-      .then((fileContent) => {
-        const timesSemClasse = JSON.parse(fileContent) as TimeFile[];
-        return timesSemClasse.map(
-          ({ id, nome, estado }) => new Time(id, nome, estado)
-        );
-      })
-      .then((repoTimes) => {
-        let newTimes;
+    const json = JSON.stringify(times);
 
-        if (Array.isArray(times)) [...times, ...repoTimes];
-        else newTimes = [times, ...repoTimes];
-
-        const json = JSON.stringify(newTimes);
-
-        writeFile(this.timesFilePath, json).catch(errorHandler);
-      })
-      .catch(errorHandler);
+    return writeFile(this.timesFilePath, json).catch(errorHandler);
   }
 }
