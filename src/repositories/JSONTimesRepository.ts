@@ -12,59 +12,79 @@ type TimeFile = {
   escudo: string;
 };
 
+type FindAll = () => Promise<Time[]>;
+type Save = () => Promise<void>;
+
+type FindById = (id: number) => Promise<Time>;
+type Update = (time: Time) => Promise<void>;
+
 export default class JSONTimesRepository implements TimesRepository {
   private timesFilePath: string;
 
   constructor(outrosTimes?: string) {
     this.timesFilePath = outrosTimes || TIMES_FILE_PATH;
+
+    this.findById = this.findById.bind(this) as FindById;
+    this.findAll = this.findAll.bind(this) as FindAll;
+    this.update = this.update.bind(this) as Update;
+    this.save = this.save.bind(this) as Save;
   }
 
   // --- Recupera todos
 
-  public findAll(): Promise<Time[]> {
-    return readFile(this.timesFilePath)
-      .then((fileContent: Buffer) => {
-        const timesSemClasse = JSON.parse(fileContent.toString()) as TimeFile[];
-        return timesSemClasse.map(
-          ({ id, nome, sigla, escudo }) => new Time(id, nome, sigla, escudo)
-        );
-      })
-      .catch((error: any) => {
-        if (error instanceof Error) {
-          throw new Error(
-            `Falha a carregar os times. Motivo: ${error.message}`
-          );
-        } else {
-          throw error;
-        }
-      });
+  public async findAll(): Promise<Time[]> {
+    try {
+      const fileContent = await readFile(this.timesFilePath);
+
+      const timesSemClasse = JSON.parse(fileContent.toString()) as TimeFile[];
+
+      return timesSemClasse.map(
+        ({ id, nome, sigla, escudo }) => new Time(id, nome, sigla, escudo)
+      );
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Falha a carregar os times. Motivo: ${error.message}`);
+      } else {
+        throw error;
+      }
+    }
   }
 
   // --- Recupera um pelo seu id
 
-  public findById(id: number): Promise<Time> {
-    return readFile(this.timesFilePath)
-      .then((fileContent: Buffer) => {
-        const timesSemClasse = JSON.parse(fileContent.toString()) as TimeFile[];
-        const time = timesSemClasse.find((time) => time.id === id);
+  public async findById(id: number): Promise<Time> {
+    try {
+      const times = await this.findAll();
 
-        if (!time) throw new Error("Time nao existe");
+      const time = times.find((time) => time.getId() === id);
 
-        return new Time(time.id, time.nome, time.sigla, time.escudo);
-      })
-      .catch((error: any) => {
-        if (error instanceof Error) {
-          throw new Error(`Falha ao encontrar time. Motivo: ${error.message}`);
-        } else {
-          throw error;
-        }
-      });
+      if (!time) throw new Error("Time nao existe");
+
+      return time;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Falha ao encontrar time. Motivo: ${error.message}`);
+      } else {
+        throw error;
+      }
+    }
   }
 
   // --- Atualiza um time
 
-  public update(time: Time): Promise<void> {
-    const errorHandler = (error: any) => {
+  public async update(time: Time): Promise<void> {
+    try {
+      const times = await this.findAll();
+      const timeIndex = times.findIndex((t) => t.getId() === time.getId());
+
+      if (timeIndex < 0) throw new Error("Time nao existe");
+
+      times[timeIndex] = time;
+
+      await this.save(times);
+
+      console.log("Time atualizado com sucesso");
+    } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(
           `Falha ao atualizar os times. Motivo: ${error.message}`
@@ -72,42 +92,24 @@ export default class JSONTimesRepository implements TimesRepository {
       } else {
         throw error;
       }
-    };
-
-    return readFile(this.timesFilePath)
-      .then((fileContent: Buffer) => {
-        const timesSemClasse = JSON.parse(fileContent.toString()) as TimeFile[];
-        return timesSemClasse.map(
-          ({ id, nome, sigla, escudo }) => new Time(id, nome, sigla, escudo)
-        );
-      })
-      .then((times) => {
-        const timeIndex = times.findIndex((t) => t.getId() === time.getId());
-
-        if (timeIndex < 0) throw new Error("Time nao existe");
-
-        times[timeIndex] = time;
-
-        const json = JSON.stringify(times);
-
-        writeFile(this.timesFilePath, json).catch(errorHandler);
-      })
-      .catch(errorHandler);
+    }
   }
 
   // --- Salva um time
 
-  public save(times: Time[]): Promise<void> {
-    const errorHandler = (error: any) => {
+  public async save(times: Time[]): Promise<void> {
+    try {
+      const json = JSON.stringify(times);
+
+      await writeFile(this.timesFilePath, json);
+
+      console.log("Times salvos com sucesso");
+    } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(`Falha ao salvar os times. Motivo: ${error.message}`);
       } else {
         throw error;
       }
-    };
-
-    const json = JSON.stringify(times);
-
-    return writeFile(this.timesFilePath, json).catch(errorHandler);
+    }
   }
 }
