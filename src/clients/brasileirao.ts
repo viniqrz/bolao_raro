@@ -1,4 +1,5 @@
 import axios from "axios";
+import "dotenv/config";
 
 import {
   APIDetalhesRodada,
@@ -6,24 +7,25 @@ import {
   APIPosicaoTabela,
 } from "../@types/api/brasileirao";
 
-const TOKEN =
-  "bearer d44db0cc0676316ee1248780ec04da734e0f06a77c30aaf9a2dcbb1899093361";
-
 const config = {
-  headers: { Authorization: TOKEN },
+  headers: {
+    Authorization: `bearer ${process.env.API_BRASILEIRAO_TOKEN}`,
+  },
 };
 
 export default class APIBrasileirao {
   protected readonly baseUrl: string;
 
   constructor() {
-    this.baseUrl =
-      "https://us-central1-small-talk-3972f.cloudfunctions.net/v1/v1/campeonatos/10";
+    this.baseUrl = process.env.API_BRASILEIRAO_URL;
   }
 
-  public async buscarTabela(): Promise<APIPosicaoTabela[]> {
+  public async buscarTabela(campeonatoId = 10): Promise<APIPosicaoTabela[]> {
     try {
-      const response = await axios.get(`${this.baseUrl}/tabela`, config);
+      const response = await axios.get(
+        `${this.baseUrl}/campeonatos/${campeonatoId}/tabela`,
+        config
+      );
 
       return response.data as APIPosicaoTabela[];
     } catch (err) {
@@ -31,9 +33,12 @@ export default class APIBrasileirao {
     }
   }
 
-  public async buscarRodadas(): Promise<APIRodada[]> {
+  public async buscarRodadas(campeonatoId = 10): Promise<APIRodada[]> {
     try {
-      const response = await axios.get(`${this.baseUrl}/rodadas`, config);
+      const response = await axios.get(
+        `${this.baseUrl}/campeonatos/${campeonatoId}/rodadas`,
+        config
+      );
 
       return response.data as APIRodada[];
     } catch (err) {
@@ -42,11 +47,12 @@ export default class APIBrasileirao {
   }
 
   public async buscarDetalhesRodada(
-    numeroRodada: number
+    numeroRodada: number,
+    campeonatoId = 10
   ): Promise<APIDetalhesRodada> {
     try {
       const response = await axios.get(
-        `${this.baseUrl}/rodadas/${numeroRodada}`,
+        `${this.baseUrl}/campeonatos/${campeonatoId}/rodadas/${numeroRodada}`,
         config
       );
 
