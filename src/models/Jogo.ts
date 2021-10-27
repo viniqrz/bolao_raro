@@ -6,17 +6,25 @@ export default class Jogo {
   protected readonly dataHora: Date;
   protected readonly mandante: Time;
   protected readonly visitante: Time;
-  protected golsMandante?: number;
-  protected golsVisitante?: number;
+  protected golsMandante: number;
+  protected golsVisitante: number;
   // Criar um mecanismo que crie um id a
   // cada novo jogo sem que eu passe o id no construtor.
   // vai ser necessário uma variável estática para isso. // static.
 
-  public constructor(mandante: Time, visitante: Time, dataHora: Date) {
+  public constructor(
+    mandante: Time,
+    visitante: Time,
+    dataHora: Date,
+    golsMandante: number,
+    golsVisitante: number
+  ) {
     this.id = Jogo.lista.length;
     this.mandante = mandante;
     this.visitante = visitante;
     this.dataHora = dataHora;
+    this.golsMandante = golsMandante;
+    this.golsVisitante = golsVisitante;
 
     Jogo.lista = [...Jogo.lista, this];
   }

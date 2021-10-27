@@ -43,7 +43,13 @@ export default class JSONBrasileirao {
     const rodadas = detalhesRodadas.map(
       ({ partidas, rodada: numeroRodada }) => {
         const jogos = partidas.map(
-          ({ time_mandante, time_visitante, data_realizacao_iso }) => {
+          ({
+            time_mandante,
+            time_visitante,
+            data_realizacao_iso,
+            placar_mandante,
+            placar_visitante,
+          }) => {
             function instanciarTime(api_time: APITime) {
               return new Time(
                 api_time.time_id,
@@ -56,7 +62,13 @@ export default class JSONBrasileirao {
             const mandante = instanciarTime(time_mandante);
             const visitante = instanciarTime(time_visitante);
 
-            return new Jogo(mandante, visitante, data_realizacao_iso);
+            return new Jogo(
+              mandante,
+              visitante,
+              data_realizacao_iso,
+              placar_mandante,
+              placar_visitante
+            );
           }
         );
 
@@ -66,6 +78,20 @@ export default class JSONBrasileirao {
 
     await repository.save(rodadas);
 
-    console.log("Rodadas gerados com sucesso!");
+    console.log("Rodadas geradas com sucesso!");
+  }
+
+  public async getRodada(numeroRodada: number): Promise<Rodada> {
+    // Atualiza placar
+    await this.gerarRodadas();
+
+    // Busca rodada
+    const repository = new JSONRodadasRepository();
+
+    const rodada = await repository.findByNumeroRodada(numeroRodada);
+
+    return rodada;
   }
 }
+
+void new JSONBrasileirao().getRodada(2).then((rodada) => console.log(rodada));
