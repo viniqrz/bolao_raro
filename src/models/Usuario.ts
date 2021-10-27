@@ -8,11 +8,13 @@ export default class Usuario {
   protected nome: string;
   protected readonly email: string;
   protected senha: string;
+  protected inativo: boolean;
 
-  constructor(nome: string, email: string, senha: string) {
+  constructor(nome: string, email: string, senha: string, inativo: boolean) {
     this.nome = nome;
     this.email = email;
     this.senha = senha;
+    this.inativo = inativo;
   }
 
   public aposta(rodada: Rodada, palpites: Palpite[]): ApostaRodada {
@@ -32,7 +34,14 @@ export default class Usuario {
   }
 
   public getSenha(): string {
-    // @todo
     return this.senha;
+  }
+
+  public getInativo(): boolean {
+    return this.inativo;
+  }
+
+  public setInativo(value: boolean): void {
+    this.inativo = value;
   }
 }

@@ -9,10 +9,12 @@ type UsuarioFile = {
   nome: string;
   email: string;
   senha: string;
+  inativo: boolean;
 };
 
 type FindAll = () => Promise<Usuario[]>;
 type Remove = (email: string) => Promise<void>;
+type Save = () => Promise<void>;
 
 type FindByEmail = (email: string) => Promise<Usuario>;
 type Update = (usuario: Usuario) => Promise<void>;
@@ -27,6 +29,7 @@ export default class JSONUsuariosRepository implements UsuariosRepository {
     this.findAll = this.findAll.bind(this) as FindAll;
     this.remove = this.remove.bind(this) as Remove;
     this.update = this.update.bind(this) as Update;
+    this.save = this.save.bind(this) as Save;
   }
 
   // --- Recupera todos
@@ -40,7 +43,8 @@ export default class JSONUsuariosRepository implements UsuariosRepository {
       const usuariosSemClasse = JSON.parse(fileContent) as UsuarioFile[];
 
       return usuariosSemClasse.map(
-        ({ nome, email, senha }) => new Usuario(nome, email, senha)
+        ({ nome, email, senha, inativo }) =>
+          new Usuario(nome, email, senha, inativo)
       );
     } catch (error: unknown) {
       if (error instanceof Error) {
@@ -60,8 +64,6 @@ export default class JSONUsuariosRepository implements UsuariosRepository {
       const usuarios = await this.findAll();
 
       const usuario = usuarios.find((u) => u.getEmail() === email);
-
-      if (!usuario) throw new Error("Usuario nao existe");
 
       return usuario;
     } catch (error: unknown) {
@@ -122,6 +124,26 @@ export default class JSONUsuariosRepository implements UsuariosRepository {
         throw new Error(
           `Falha ao atualizar os usuarios. Motivo: ${error.message}`
         );
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  // ---- Cria um usuario
+
+  public async save(usuario: Usuario): Promise<void> {
+    try {
+      const usuarios = await this.findAll();
+
+      const json = JSON.stringify([...usuarios, usuario]);
+
+      await writeFile(this.usuariosFilePath, json);
+
+      console.log("Usuário salvo com sucesso!");
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Falha ao salvar as rodadas. Motivo: ${error.message}`);
       } else {
         throw error;
       }

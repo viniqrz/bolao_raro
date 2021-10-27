@@ -14,6 +14,7 @@
   "author": "coleta@rarolabs.com.br",
   "license": "MIT",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.9.4",
     "@typescript-eslint/eslint-plugin": "^4.31.1",
@@ -29,6 +30,7 @@
   },
   "dependencies": {
     "axios": "^0.23.0",
+    "bcrypt": "^5.0.1",
     "dotenv": "^10.0.0"
   }
 }
