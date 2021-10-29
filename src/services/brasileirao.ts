@@ -90,8 +90,8 @@ export default class JSONBrasileirao {
 
     const rodada = await repository.findByNumeroRodada(numeroRodada);
 
+    console.log(rodada);
+
     return rodada;
   }
 }
-
-void new JSONBrasileirao().getRodada(2).then((rodada) => console.log(rodada));

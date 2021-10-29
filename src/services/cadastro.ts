@@ -39,7 +39,7 @@ export default class Cadastro {
       return user;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.log(`Falha ao cadastrar usuario. Motivo: ${error.message}`);
+        throw new Error(`Falha ao cadastrar usuario. Motivo: ${error.message}`);
       } else {
         throw error;
       }
