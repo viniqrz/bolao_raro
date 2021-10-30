@@ -10,7 +10,7 @@ type Credentials = {
   senha: string;
 };
 
-export default class Cadastro {
+export default class UsuarioService {
   // ---- Cria cadastro de usuario
   public async create(credentials: Credentials): Promise<Usuario> {
     try {
@@ -46,6 +46,36 @@ export default class Cadastro {
     }
   }
 
+  // ---- Loga usuário
+  public async login(email: string, senha: string): Promise<Usuario> {
+    try {
+      const isEmailValid = validateEmail(email);
+
+      if (!isEmailValid) throw new Error("Endereço de email invalido");
+
+      const repository = new JSONUsuariosRepository();
+
+      const userAlreadyExists = await repository.findByEmail(email);
+
+      if (!userAlreadyExists) throw new Error("Email ou senha invalido(a)");
+
+      const hash = userAlreadyExists.getSenha();
+      const match = await compare(senha, hash);
+
+      if (!match) throw new Error("Email ou senha invalido(a)");
+
+      console.log("Usuario logado com sucesso!");
+
+      return userAlreadyExists;
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        throw new Error(`Falha ao executar Login. Motivo: ${error.message}`);
+      } else {
+        throw error;
+      }
+    }
+  }
+
   // ---- Atualiza cadastro de usuario
   public async update(credentials: Credentials): Promise<Usuario> {
     try {
@@ -74,7 +104,7 @@ export default class Cadastro {
       return user;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.log(`Falha ao atualizar usuario. Motivo: ${error.message}`);
+        throw new Error(`Falha ao atualizar usuario. Motivo: ${error.message}`);
       } else {
         throw error;
       }
@@ -104,12 +134,10 @@ export default class Cadastro {
 
       console.log("Usuario inativado com sucesso!");
 
-      console.log(userAlreadyExists);
-
       return userAlreadyExists;
     } catch (error: unknown) {
       if (error instanceof Error) {
-        console.log(`Falha ao desativar usuario. Motivo: ${error.message}`);
+        throw new Error(`Falha ao desativar usuario. Motivo: ${error.message}`);
       } else {
         throw error;
       }

@@ -8,6 +8,7 @@ export default class Jogo {
   protected readonly visitante: Time;
   protected golsMandante: number;
   protected golsVisitante: number;
+  protected placar: string;
   // Criar um mecanismo que crie um id a
   // cada novo jogo sem que eu passe o id no construtor.
   // vai ser necessário uma variável estática para isso. // static.
@@ -17,7 +18,8 @@ export default class Jogo {
     visitante: Time,
     dataHora: Date,
     golsMandante: number,
-    golsVisitante: number
+    golsVisitante: number,
+    placar: string
   ) {
     this.id = Jogo.lista.length;
     this.mandante = mandante;
@@ -25,6 +27,7 @@ export default class Jogo {
     this.dataHora = dataHora;
     this.golsMandante = golsMandante;
     this.golsVisitante = golsVisitante;
+    this.placar = placar;
 
     Jogo.lista = [...Jogo.lista, this];
   }
@@ -57,8 +60,17 @@ export default class Jogo {
     return Jogo.lista;
   }
 
+  public getPlacar(): string {
+    return this.placar;
+  }
+
   public atualizaResultado(golsMandante: number, golsVisitante: number): void {
     this.golsMandante = golsMandante;
     this.golsVisitante = golsVisitante;
+
+    const mandante = this.mandante.getNome();
+    const visitante = this.visitante.getNome();
+
+    this.placar = `${mandante} ${golsMandante}x${golsVisitante} ${visitante}`;
   }
 }

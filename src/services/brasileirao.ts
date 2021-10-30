@@ -49,6 +49,7 @@ export default class JSONBrasileirao {
             data_realizacao_iso,
             placar_mandante,
             placar_visitante,
+            placar,
           }) => {
             function instanciarTime(api_time: APITime) {
               return new Time(
@@ -67,7 +68,8 @@ export default class JSONBrasileirao {
               visitante,
               data_realizacao_iso,
               placar_mandante,
-              placar_visitante
+              placar_visitante,
+              placar
             );
           }
         );
@@ -89,8 +91,6 @@ export default class JSONBrasileirao {
     const repository = new JSONRodadasRepository();
 
     const rodada = await repository.findByNumeroRodada(numeroRodada);
-
-    console.log(rodada);
 
     return rodada;
   }

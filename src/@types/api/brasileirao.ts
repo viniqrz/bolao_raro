@@ -21,6 +21,7 @@ export type APIPartida = {
   placar_mandante: number;
   placar_visitante: number;
   data_realizacao_iso: Date;
+  placar: string;
 };
 
 export type APIDetalhesRodada = {
