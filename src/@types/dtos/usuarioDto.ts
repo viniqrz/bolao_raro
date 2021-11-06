@@ -23,3 +23,8 @@ export type AlterarUsuarioDTO = {
   avatarUrl?: string;
   ativo?: boolean;
 };
+
+export type UsuarioLogadoDTO = {
+  user: UsuarioCriadoDTO;
+  token: string;
+};

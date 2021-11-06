@@ -1,8 +1,13 @@
 import { hash, compare } from "bcrypt";
+import { sign } from "jsonwebtoken";
+
+import "dotenv/config";
+
 import {
   AlterarUsuarioDTO,
   UsuarioCriadoDTO,
   UsuarioDTO,
+  UsuarioLogadoDTO,
 } from "../@types/dtos/usuarioDto";
 import { Usuario } from "../entity/UsuarioEntity";
 
@@ -15,7 +20,7 @@ import validateEmail from "../helpers/validateEmail";
 
 interface IUsuarioService {
   create(data: UsuarioDTO): Promise<UsuarioCriadoDTO>;
-  login(email: string, senha: string): Promise<UsuarioCriadoDTO>;
+  login(email: string, senha: string): Promise<UsuarioLogadoDTO>;
   update(data: AlterarUsuarioDTO): Promise<UsuarioCriadoDTO>;
   delete(email: string, senha: string): Promise<UsuarioCriadoDTO>;
 }
@@ -52,7 +57,7 @@ class UsuarioService implements IUsuarioService {
     }
   }
 
-  public async login(email: string, senha: string): Promise<UsuarioCriadoDTO> {
+  public async login(email: string, senha: string): Promise<UsuarioLogadoDTO> {
     try {
       const repository = new UsuarioRepository();
       const user = await repository.findByEmail(email);
@@ -67,7 +72,15 @@ class UsuarioService implements IUsuarioService {
 
       const userWithoutPassword = this.omitSenha(user);
 
-      return userWithoutPassword;
+      const token = await sign(
+        {
+          data: userWithoutPassword,
+        },
+        process.env.JWT_TOKEN,
+        { expiresIn: "6h" }
+      );
+
+      return { user: userWithoutPassword, token };
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error(`Falha ao executar Login. Motivo: ${error.message}`);
