@@ -1,2 +1,8 @@
-node_modules
-coverage
+.env
+.idea/
+.vscode/
+node_modules/
+build/
+tmp/
+temp/
+coverage/

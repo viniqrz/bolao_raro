@@ -1,5 +1,3 @@
-import bcrypt from "bcrypt";
-
 import JSONUsuariosRepository from "../src/repositories/JSONUsuariosRepository";
 import UsuarioService from "../src/services/usuario-service";
 import Usuario from "../src/models/Usuario";
@@ -136,9 +134,6 @@ describe("UsuarioService layer", () => {
       jest
         .spyOn(JSONUsuariosRepository.prototype, "findByEmail")
         .mockResolvedValue(usuarioAtivo);
-
-      const bcryptCompare = jest.fn().mockResolvedValue(true);
-      (bcrypt.compare as jest.Mock) = bcryptCompare;
 
       jest
         .spyOn(JSONUsuariosRepository.prototype, "update")
