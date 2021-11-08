@@ -13,13 +13,13 @@ export class Campeonato {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, length: 50 })
+  @Column({ nullable: false, length: 50, unique: true })
   nome: string;
 
-  @Column({ nullable: false, length: 50 })
+  @Column({ nullable: false, length: 50, unique: true })
   slug: string;
 
-  @Column({ nullable: false, length: 50 })
+  @Column({ nullable: false, length: 50, unique: true })
   nomePopular: string;
 
   @Column({ nullable: false, length: 50 })
@@ -28,7 +28,7 @@ export class Campeonato {
   @Column({ nullable: false, length: 500 })
   logo: string;
 
-  @Column()
+  @Column({ nullable: false })
   idCampeonatoApiExterna: number;
 
   @ManyToMany(() => Usuario)

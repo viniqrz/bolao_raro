@@ -13,7 +13,7 @@ const config = {
   },
 };
 
-export default class APIBrasileirao {
+export class APIBrasileirao {
   protected readonly baseUrl: string;
 
   constructor() {

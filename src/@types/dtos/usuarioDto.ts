@@ -15,6 +15,15 @@ export type UsuarioCriadoDTO = {
   ativo?: boolean;
 };
 
+export type UsuarioWithoutPassword = {
+  id?: number;
+  nome: string;
+  email: string;
+  senha?: string;
+  avatarUrl: string;
+  ativo?: boolean;
+};
+
 export type AlterarUsuarioDTO = {
   id?: number;
   nome?: string;

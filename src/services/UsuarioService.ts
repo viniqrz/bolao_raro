@@ -9,23 +9,20 @@ import {
   UsuarioDTO,
   UsuarioLogadoDTO,
 } from "../@types/dtos/usuarioDto";
-import { Usuario } from "../entity/UsuarioEntity";
+import { Usuario } from "../models/UsuarioEntity";
 
-import {
-  IUsuarioRepository,
-  UsuarioRepository,
-} from "../new-repositories/UsuarioRepository";
+import { IUsuarioRepository } from "../repositories/IUsuarioRepository";
 
 import validateEmail from "../helpers/validateEmail";
 
 interface IUsuarioService {
   create(data: UsuarioDTO): Promise<UsuarioCriadoDTO>;
-  login(email: string, senha: string): Promise<UsuarioLogadoDTO>;
-  update(data: AlterarUsuarioDTO): Promise<UsuarioCriadoDTO>;
+  authenticate(email: string, senha: string): Promise<UsuarioLogadoDTO>;
+  update(email: string, data: AlterarUsuarioDTO): Promise<UsuarioCriadoDTO>;
   delete(email: string, senha: string): Promise<UsuarioCriadoDTO>;
 }
 
-class UsuarioService implements IUsuarioService {
+export class UsuarioService implements IUsuarioService {
   constructor(private usuarioRepository: IUsuarioRepository) {}
 
   public async create(data: UsuarioDTO): Promise<UsuarioCriadoDTO> {
@@ -34,21 +31,20 @@ class UsuarioService implements IUsuarioService {
 
       this.validateData(data);
 
-      const repository = new UsuarioRepository();
-      const userAlreadyExists = await repository.findByEmail(email);
+      const userAlreadyExists = await this.usuarioRepository.findByEmail(email);
 
       if (userAlreadyExists) throw new Error("Usuario já existe");
 
       const passwordHash = await hash(senha, 8);
       const user = this.factory(data, passwordHash);
-      const savedUser = await repository.save(user);
-
-      console.log("Usuario cadastrado com sucesso!");
+      const savedUser = await this.usuarioRepository.save(user);
 
       const userWithoutPassword = this.omitSenha(savedUser);
 
+      console.log("Usuario cadastrado com sucesso!");
+
       return userWithoutPassword;
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Falha ao cadastrar usuario. Motivo: ${error.message}`);
       } else {
@@ -57,10 +53,12 @@ class UsuarioService implements IUsuarioService {
     }
   }
 
-  public async login(email: string, senha: string): Promise<UsuarioLogadoDTO> {
+  public async authenticate(
+    email: string,
+    senha: string
+  ): Promise<UsuarioLogadoDTO> {
     try {
-      const repository = new UsuarioRepository();
-      const user = await repository.findByEmail(email);
+      const user = await this.usuarioRepository.findByEmail(email);
 
       if (!user) throw new Error("Email ou senha invalido(a)");
 
@@ -72,7 +70,7 @@ class UsuarioService implements IUsuarioService {
 
       const userWithoutPassword = this.omitSenha(user);
 
-      const token = await sign(
+      const token = sign(
         {
           data: userWithoutPassword,
         },
@@ -81,7 +79,7 @@ class UsuarioService implements IUsuarioService {
       );
 
       return { user: userWithoutPassword, token };
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Falha ao executar Login. Motivo: ${error.message}`);
       } else {
@@ -90,30 +88,27 @@ class UsuarioService implements IUsuarioService {
     }
   }
 
-  public async update(data: AlterarUsuarioDTO): Promise<UsuarioCriadoDTO> {
+  public async update(
+    email: string,
+    data: AlterarUsuarioDTO
+  ): Promise<UsuarioCriadoDTO> {
     try {
-      const { email } = data;
+      const user = await this.usuarioRepository.findByEmail(email);
 
-      const updateFields = Object.keys(data);
-      const repository = new UsuarioRepository();
+      if (!user) throw new Error("Email incorreto");
 
-      const userAlreadyExists = await repository.findByEmail(email);
-      if (!userAlreadyExists) throw new Error("Email nao esta cadastrado");
+      const newUser = { ...user, ...data };
+      const { senha } = newUser;
 
-      if (data.hasOwnProperty("senha")) {
-        data.senha = await hash(data.senha, 8);
-      }
+      if (data.hasOwnProperty("senha")) newUser.senha = await hash(senha, 8);
 
-      updateFields.forEach((prop) => (userAlreadyExists[prop] = data[prop]));
-
-      const savedUser = await repository.save(userAlreadyExists);
+      const saved = await this.usuarioRepository.save(newUser);
+      const userWithoutPassword = this.omitSenha(saved);
 
       console.log("Usuario atualizado com sucesso!");
 
-      const userWithoutPassword = this.omitSenha(savedUser);
-
       return userWithoutPassword;
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Falha ao atualizar usuario. Motivo: ${error.message}`);
       } else {
@@ -122,25 +117,18 @@ class UsuarioService implements IUsuarioService {
     }
   }
 
-  public async delete(email: string, senha: string): Promise<UsuarioCriadoDTO> {
+  public async delete(email: string): Promise<UsuarioCriadoDTO> {
     try {
-      const repository = new UsuarioRepository();
-      const user = await repository.findByEmail(email);
+      const user = await this.usuarioRepository.findByEmail(email);
 
-      if (!user) throw new Error("Email ou senha invalido(a)");
-
-      const hash = user.senha;
-      const match = await compare(senha, hash);
-      if (!match) throw new Error("Email ou senha invalido(a)");
-
-      const deletedUser = await repository.remove(user);
+      const deletedUser = await this.usuarioRepository.remove(user);
 
       console.log("Usuario removido com sucesso!");
 
       const userWithoutPassword = this.omitSenha(deletedUser);
 
       return userWithoutPassword;
-    } catch (error: unknown) {
+    } catch (error) {
       if (error instanceof Error) {
         throw new Error(`Falha ao remover usuario. Motivo: ${error.message}`);
       } else {
@@ -178,10 +166,3 @@ class UsuarioService implements IUsuarioService {
     return user;
   }
 }
-
-// void new UsuarioService().create({
-//   nome: "awodkaow",
-//   email: "awokdaw",
-//   senha: "aowkdaw",
-//   avatarUrl: "aodkawodk",
-// });
