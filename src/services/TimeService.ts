@@ -1,16 +1,20 @@
 import { APITime } from "../@types/api/brasileirao";
 import { Time } from "../models/TimeEntity";
-import { TimeRepository } from "../repositories/TimeRepository";
+import { ITimeRepository } from "../repositories/ITimeRepository";
 
 interface ITimeService {
   update(api_time: APITime): Promise<Time>;
 }
 
 export class TimeService implements ITimeService {
-  constructor(private timeRepository: TimeRepository) {}
+  constructor(private timeRepository: ITimeRepository) {}
 
   public async update(timeApi: APITime): Promise<Time> {
     const time = this.factory(timeApi);
+
+    const savedTime = await this.timeRepository.findByName(time.nome);
+
+    if (savedTime) return savedTime;
 
     return await this.timeRepository.save(time);
   }

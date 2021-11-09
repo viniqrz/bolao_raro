@@ -14,19 +14,13 @@ export class Partida {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ nullable: false, length: 50 })
+  @Column({ nullable: false, length: 80 })
   placar: string;
 
-  @ManyToOne(() => Time, { cascade: true })
-  mandante: Time;
-
-  @ManyToOne(() => Time, { cascade: true })
-  visitante: Time;
-
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   placarMandante: number;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   placarVisitante: number;
 
   @Column({ nullable: false, length: 50 })
@@ -35,8 +29,14 @@ export class Partida {
   @Column({ nullable: false, length: 50 })
   slug: string;
 
-  @Column({ nullable: false })
+  @Column({ nullable: true })
   dataRealizacao: Date;
+
+  @ManyToOne(() => Time, { cascade: true })
+  mandante: Time;
+
+  @ManyToOne(() => Time, { cascade: true })
+  visitante: Time;
 
   @ManyToOne(() => Rodada, (rodada) => rodada.partidas)
   rodada: Rodada;

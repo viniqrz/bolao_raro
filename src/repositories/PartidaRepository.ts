@@ -3,6 +3,6 @@ import { Partida } from "../models/PartidaEntity";
 import { IPartidaRepository } from "./IPartidaRepository";
 
 @EntityRepository(Partida)
-export class partidaRepository
+export class PartidaRepository
   extends Repository<Partida>
   implements IPartidaRepository {}

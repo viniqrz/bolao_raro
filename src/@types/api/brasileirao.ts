@@ -26,5 +26,7 @@ export type APIPartida = {
 
 export type APIDetalhesRodada = {
   rodada: number;
+  slug: string;
+  status: string;
   partidas: APIPartida[];
 };

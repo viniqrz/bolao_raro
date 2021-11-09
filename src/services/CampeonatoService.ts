@@ -7,10 +7,11 @@ import { RodadaRepository } from "../repositories/RodadaRepository";
 import { Rodada } from "../models/RodadaEntity";
 
 import "dotenv/config";
+import { getCustomRepository } from "typeorm";
 
 interface ICampeonatoService {
   create(data: CampeonatoDTO): Promise<Campeonato>;
-  updateResults(idCampeonatoApiExterna: number): Promise<Rodada[]>;
+  updateAllResults(): Promise<Rodada[][]>;
 }
 
 export class CampeonatoService implements ICampeonatoService {
@@ -24,7 +25,7 @@ export class CampeonatoService implements ICampeonatoService {
     return savedCampeonato;
   }
 
-  public async updateAllResults() {
+  public async updateAllResults(): Promise<Rodada[][]> {
     const campeonatos = await this.repository.findAll();
 
     const activeCampeonatos = this.getActiveCampeonatos(campeonatos);
@@ -38,11 +39,11 @@ export class CampeonatoService implements ICampeonatoService {
     return rodadas;
   }
 
-  public async updateResults(
+  private async updateResults(
     idCampeonatoApiExterna: number
   ): Promise<Rodada[]> {
     const client = new APIBrasileirao();
-    const rodadaRepository = new RodadaRepository();
+    const rodadaRepository = getCustomRepository(RodadaRepository);
     const rodadaService = new RodadaService(rodadaRepository, client);
 
     return await rodadaService.updateAllFromApi(idCampeonatoApiExterna);
@@ -51,14 +52,6 @@ export class CampeonatoService implements ICampeonatoService {
   private getActiveCampeonatos(campeonatos: Campeonato[]) {
     return campeonatos.filter(
       (campeonato) => campeonato.status === "em andamento"
-    );
-  }
-
-  private getRodadaPromises(campeonatos: Campeonato[]) {
-    const client = new APIBrasileirao();
-
-    return campeonatos.map(({ idCampeonatoApiExterna }) =>
-      client.buscarRodadas(10)
     );
   }
 

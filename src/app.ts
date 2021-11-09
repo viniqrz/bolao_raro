@@ -27,15 +27,19 @@ export const start = async () => {
     //   })
     // );
 
+    // console.log(
+    //   await new CampeonatoService(campeonatoRepository).create({
+    //     nome: "Campeonato",
+    //     slug: "campeonato",
+    //     nomePopular: "Campeonato Teste",
+    //     status: "em andamento",
+    //     logo: "https://logoimage.com",
+    //     idCampeonatoApiExterna: 999,
+    //   })
+    // );
+
     console.log(
-      await new CampeonatoService(campeonatoRepository).create({
-        nome: "Campeonato",
-        slug: "campeonato",
-        nomePopular: "Campeonato Teste",
-        status: "em andamento",
-        logo: "https://logoimage.com",
-        idCampeonatoApiExterna: 999,
-      })
+      await new CampeonatoService(campeonatoRepository).updateAllResults()
     );
 
     // console.log(

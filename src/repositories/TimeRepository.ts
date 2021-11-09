@@ -5,4 +5,9 @@ import { ITimeRepository } from "./ITimeRepository";
 @EntityRepository(Time)
 export class TimeRepository
   extends Repository<Time>
-  implements ITimeRepository {}
+  implements ITimeRepository
+{
+  public async findByName(nome: string) {
+    return await this.findOne({ where: { nome } });
+  }
+}
