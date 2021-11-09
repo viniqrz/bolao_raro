@@ -2,12 +2,15 @@ import { ICampeonatoRepository } from "../repositories/ICampeonatoRepository";
 import { CampeonatoDTO } from "../@types/dtos/campeonatoDto";
 import { Campeonato } from "../models/CampeonatoEntity";
 import { APIBrasileirao } from "../clients/brasileirao";
+import { RodadaService } from "./RodadaService";
+import { RodadaRepository } from "../repositories/RodadaRepository";
+import { Rodada } from "../models/RodadaEntity";
 
 import "dotenv/config";
 
 interface ICampeonatoService {
   create(data: CampeonatoDTO): Promise<Campeonato>;
-  updateResults(): any;
+  updateResults(idCampeonatoApiExterna: number): Promise<Rodada[]>;
 }
 
 export class CampeonatoService implements ICampeonatoService {
@@ -21,18 +24,28 @@ export class CampeonatoService implements ICampeonatoService {
     return savedCampeonato;
   }
 
-  public async updateResults() {
+  public async updateAllResults() {
     const campeonatos = await this.repository.findAll();
 
     const activeCampeonatos = this.getActiveCampeonatos(campeonatos);
-    const rodadaPromises = this.getRodadaPromises(activeCampeonatos);
 
-    const rodadas = await Promise.all(rodadaPromises);
-
-    // @todo
-    // rodadas.forEach()
+    const rodadas = await Promise.all(
+      activeCampeonatos.map(({ idCampeonatoApiExterna }) =>
+        this.updateResults(idCampeonatoApiExterna)
+      )
+    );
 
     return rodadas;
+  }
+
+  public async updateResults(
+    idCampeonatoApiExterna: number
+  ): Promise<Rodada[]> {
+    const client = new APIBrasileirao();
+    const rodadaRepository = new RodadaRepository();
+    const rodadaService = new RodadaService(rodadaRepository, client);
+
+    return await rodadaService.updateAllFromApi(idCampeonatoApiExterna);
   }
 
   private getActiveCampeonatos(campeonatos: Campeonato[]) {

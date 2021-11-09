@@ -48,7 +48,7 @@ export class APIBrasileirao {
 
   public async buscarDetalhesRodada(
     numeroRodada: number,
-    campeonatoId = 10
+    campeonatoId: number
   ): Promise<APIDetalhesRodada> {
     try {
       const response = await axios.get(
