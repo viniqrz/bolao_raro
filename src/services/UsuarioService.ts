@@ -88,6 +88,10 @@ export class UsuarioService implements IUsuarioService {
     }
   }
 
+  public async getUser(id: number): Promise<Usuario> {
+    return await this.usuarioRepository.findById(id);
+  }
+
   public async update(
     email: string,
     data: AlterarUsuarioDTO

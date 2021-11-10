@@ -8,9 +8,8 @@ import { serviceFactory } from "./helpers/serviceFactory";
 export const start = async () => {
   try {
     const connection = await createConnection();
-    console.log("banco de dados conectado com sucesso.");
 
-    // console.log(connection);
+    console.log("banco de dados conectado com sucesso.");
 
     // console.log(
     //   await new UsuarioService(usuarioRepository).update("sherlock@gmail.com", {
@@ -32,23 +31,9 @@ export const start = async () => {
     //   })
     // );
 
-    // const client = new APIBrasileirao();
+    // await serviceFactory.campeonato().updateAllResultsFromApi();
 
-    // console.log(
-    //   await new TimeService(timeRepository, client).updateAllFromApi(10)
-    // );
-
-    // console.log(
-    //   await new CampeonatoService(campeonatoRepository).updateAllResults()
-    // );
-
-    // await new CampeonatoService(campeonatoRepository).updateAllResults();
-
-    // console.log(
-    //   await new CampeonatoService(campeonatoRepository).updateResults()
-    // );
-
-    await serviceFactory.campeonato().updateAllResultsFromApi();
+    console.log(await serviceFactory.rodada().getRodadaByNumero(11));
 
     console.log("done");
 

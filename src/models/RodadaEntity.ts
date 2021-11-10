@@ -4,6 +4,7 @@ import {
   Column,
   ManyToOne,
   OneToMany,
+  JoinColumn,
 } from "typeorm";
 import { Campeonato } from "./CampeonatoEntity";
 import { Partida } from "./PartidaEntity";

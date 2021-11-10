@@ -10,4 +10,8 @@ export class PartidaRepository
   public async findBySlug(slug: string): Promise<Partida> {
     return await this.findOne({ where: { slug } });
   }
+
+  public async findById(id: number): Promise<Partida> {
+    return await this.findOne(id);
+  }
 }

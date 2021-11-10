@@ -1,7 +1,6 @@
 import { Usuario } from "../models/UsuarioEntity";
 import { UpdateResult } from "typeorm";
 import { QueryDeepPartialEntity } from "typeorm/query-builder/QueryPartialEntity";
-import { AlterarUsuarioDTO } from "../@types/dtos/usuarioDto";
 
 export interface IUsuarioRepository {
   save(usuario: Usuario): Promise<Usuario>;

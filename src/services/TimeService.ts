@@ -36,7 +36,7 @@ export class TimeService implements ITimeService {
 
     if (savedTime) return savedTime;
 
-    return await this.timeRepository.save(savedTime);
+    return await this.timeRepository.save(time);
   }
 
   public async getMandanteEVisitanteByName(

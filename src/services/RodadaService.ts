@@ -49,6 +49,7 @@ export class RodadaService implements IRodadaService {
     const rodada = this.rodadaFactory(campeonato, partidas, rodadaApi);
 
     const savedRodada = await this.repository.findByNumeroRodada(rodada.rodada);
+
     if (!savedRodada) return await this.repository.save(rodada);
 
     return await this.repository.save({ ...savedRodada, ...rodada });
@@ -70,6 +71,13 @@ export class RodadaService implements IRodadaService {
     );
 
     return await Promise.all(detalhesPromises);
+  }
+
+  public async getRodadaByNumero(rodada: number) {
+    return await this.repository.find({
+      where: { campeonato: { idCampeonatoApiExterna: rodada } },
+      relations: ["campeonato"],
+    });
   }
 
   private rodadaFactory(

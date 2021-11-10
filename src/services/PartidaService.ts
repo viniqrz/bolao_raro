@@ -1,7 +1,7 @@
-import { APIPartida } from "../@types/api/brasileirao";
-import { Partida } from "../models/PartidaEntity";
 import { IPartidaRepository } from "../repositories/IPartidaRepository";
 import { serviceFactory } from "../helpers/serviceFactory";
+import { APIPartida } from "../@types/api/brasileirao";
+import { Partida } from "../models/PartidaEntity";
 
 interface IPartidaService {
   updateAll(partidasApi: APIPartida[]): Promise<Partida[]>;
@@ -23,9 +23,14 @@ export class PartidaService implements IPartidaService {
     const partida = await this.partidaFactory(partidaApi);
 
     const savedPartida = await this.repository.findBySlug(partida.slug);
+
     if (!savedPartida) return await this.repository.save(partida);
 
     return await this.repository.save({ ...savedPartida, ...partida });
+  }
+
+  public async getPartida(id): Promise<Partida> {
+    return await this.repository.findById(id);
   }
 
   private async partidaFactory(partidaApi: APIPartida): Promise<Partida> {
