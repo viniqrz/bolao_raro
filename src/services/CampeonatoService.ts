@@ -8,62 +8,63 @@ import { Rodada } from "../models/RodadaEntity";
 
 import "dotenv/config";
 import { getCustomRepository } from "typeorm";
+import { TimeRepository } from "../repositories/TimeRepository";
+import { TimeService } from "./TimeService";
+import { serviceFactory } from "../helpers/serviceFactory";
+import { Time } from "../models/TimeEntity";
 
 interface ICampeonatoService {
   create(data: CampeonatoDTO): Promise<Campeonato>;
-  updateAllResults(): Promise<Rodada[][]>;
+  updateAllResultsFromApi(): Promise<Rodada[][]>;
 }
 
 export class CampeonatoService implements ICampeonatoService {
   constructor(private repository: ICampeonatoRepository) {}
 
   public async create(data: CampeonatoDTO): Promise<Campeonato> {
-    const campeonato = this.factory(data);
+    const campeonato = this.campeonatoFactory(data);
 
     const savedCampeonato = await this.repository.save(campeonato);
 
     return savedCampeonato;
   }
 
-  public async updateAllResults(): Promise<Rodada[][]> {
+  public async updateAllResultsFromApi(): Promise<Rodada[][]> {
     const campeonatos = await this.repository.findAll();
 
     const activeCampeonatos = this.getActiveCampeonatos(campeonatos);
 
     const rodadas = await Promise.all(
-      activeCampeonatos.map(({ idCampeonatoApiExterna }) =>
-        this.updateResults(idCampeonatoApiExterna)
-      )
+      activeCampeonatos.map((c) => this.updateResultsFromApi(c))
     );
 
     return rodadas;
   }
 
-  private async updateResults(
-    idCampeonatoApiExterna: number
+  private async updateResultsFromApi(
+    campeonato: Campeonato
   ): Promise<Rodada[]> {
-    const client = new APIBrasileirao();
-    const rodadaRepository = getCustomRepository(RodadaRepository);
-    const rodadaService = new RodadaService(rodadaRepository, client);
+    const id = campeonato.idCampeonatoApiExterna;
 
-    return await rodadaService.updateAllFromApi(idCampeonatoApiExterna);
+    const times = await serviceFactory.time().updateAllFromApi(id);
+    const rodadas = await serviceFactory.rodada().updateAllFromApi(campeonato);
+
+    return rodadas;
   }
 
   private getActiveCampeonatos(campeonatos: Campeonato[]) {
-    return campeonatos.filter(
-      (campeonato) => campeonato.status === "em andamento"
-    );
+    return campeonatos.filter((c) => c.status === "em andamento");
   }
 
-  private factory(data: CampeonatoDTO) {
+  private campeonatoFactory(data: CampeonatoDTO) {
     const campeonato = new Campeonato();
 
-    campeonato.nome = data.nome;
-    campeonato.slug = data.slug;
+    campeonato.idCampeonatoApiExterna = data.idCampeonatoApiExterna;
     campeonato.nomePopular = data.nomePopular;
     campeonato.status = data.status;
+    campeonato.nome = data.nome;
+    campeonato.slug = data.slug;
     campeonato.logo = data.logo;
-    campeonato.idCampeonatoApiExterna = data.idCampeonatoApiExterna;
 
     return campeonato;
   }

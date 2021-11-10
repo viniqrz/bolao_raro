@@ -22,9 +22,11 @@ export type APIPartida = {
   placar_visitante: number;
   data_realizacao_iso: Date;
   placar: string;
+  slug: string;
 };
 
 export type APIDetalhesRodada = {
+  nome: string;
   rodada: number;
   slug: string;
   status: string;

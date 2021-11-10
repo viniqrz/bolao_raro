@@ -5,4 +5,9 @@ import { IRodadaRepository } from "./IRodadaRepository";
 @EntityRepository(Rodada)
 export class RodadaRepository
   extends Repository<Rodada>
-  implements IRodadaRepository {}
+  implements IRodadaRepository
+{
+  public async findByNumeroRodada(rodada: number): Promise<Rodada> {
+    return await this.findOne({ where: { rodada } });
+  }
+}

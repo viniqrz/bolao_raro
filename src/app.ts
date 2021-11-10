@@ -1,12 +1,9 @@
-import { createConnection, getCustomRepository } from "typeorm";
 import "reflect-metadata";
-
 import "dotenv/config";
 
-import { UsuarioService } from "./services/UsuarioService";
-import { CampeonatoService } from "./services/CampeonatoService";
-import { UsuarioRepository } from "./repositories/UsuarioRepository";
-import { CampeonatoRepository } from "./repositories/CampeonatoRepository";
+import { createConnection } from "typeorm";
+
+import { serviceFactory } from "./helpers/serviceFactory";
 
 export const start = async () => {
   try {
@@ -14,9 +11,6 @@ export const start = async () => {
     console.log("banco de dados conectado com sucesso.");
 
     // console.log(connection);
-
-    const usuarioRepository = getCustomRepository(UsuarioRepository);
-    const campeonatoRepository = getCustomRepository(CampeonatoRepository);
 
     // console.log(
     //   await new UsuarioService(usuarioRepository).update("sherlock@gmail.com", {
@@ -38,13 +32,23 @@ export const start = async () => {
     //   })
     // );
 
-    console.log(
-      await new CampeonatoService(campeonatoRepository).updateAllResults()
-    );
+    // const client = new APIBrasileirao();
+
+    // console.log(
+    //   await new TimeService(timeRepository, client).updateAllFromApi(10)
+    // );
+
+    // console.log(
+    //   await new CampeonatoService(campeonatoRepository).updateAllResults()
+    // );
+
+    // await new CampeonatoService(campeonatoRepository).updateAllResults();
 
     // console.log(
     //   await new CampeonatoService(campeonatoRepository).updateResults()
     // );
+
+    await serviceFactory.campeonato().updateAllResultsFromApi();
 
     console.log("done");
 
