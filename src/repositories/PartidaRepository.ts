@@ -12,6 +12,6 @@ export class PartidaRepository
   }
 
   public async findById(id: number): Promise<Partida> {
-    return await this.findOne(id);
+    return await this.findOne({ where: { id }, relations: ["rodada"]});
   }
 }

@@ -3,21 +3,16 @@ import { IApostaRepository } from "./IApostaRepository";
 import { Aposta } from "../models/ApostaEntity";
 
 @EntityRepository(Aposta)
-export class apostaRepository
+export class ApostaRepository
   extends Repository<Aposta>
   implements IApostaRepository
 {
-  public async findByRodadaAndUser(
-    rodada: number,
-    usuarioId: number
+  public async findByUserIdAndRodada(
+    usuarioId: number, rodada: number
   ): Promise<Aposta[]> {
-    return await this.find({ where: { rodada, usuarioId } });
-  }
-
-  public async findByUserId(usuarioId: number): Promise<Aposta[]> {
     return await this.find({
-      where: { usuario: { id: usuarioId } },
-      relations: ["usuario", "partida"],
+      where: { usuario: { id: usuarioId }, rodada: { rodada } },
+      relations: ["usuario", "partida", "rodada"],
     });
   }
 }

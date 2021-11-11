@@ -6,6 +6,7 @@ import {
   OneToMany,
   JoinColumn,
 } from "typeorm";
+import { Aposta } from "./ApostaEntity";
 import { Campeonato } from "./CampeonatoEntity";
 import { Partida } from "./PartidaEntity";
 
@@ -31,4 +32,7 @@ export class Rodada {
 
   @OneToMany(() => Partida, (partida) => partida.rodada)
   partidas: Partida[];
+
+  @OneToMany(() => Aposta, (aposta) => aposta.rodada)
+  apostas: Aposta;
 }

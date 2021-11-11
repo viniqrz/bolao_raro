@@ -4,6 +4,7 @@ import { Aposta } from "../models/ApostaEntity";
 import { serviceFactory } from "../helpers/serviceFactory";
 import { Usuario } from "../models/UsuarioEntity";
 import { Partida } from "../models/PartidaEntity";
+import { Rodada } from "../models/RodadaEntity";
 
 interface IApostaService {
   createMany(
@@ -21,37 +22,57 @@ export class ApostaService implements IApostaService {
     rodada: number,
     palpites: PalpiteDTO[]
   ): Promise<Aposta[]> {
-    const hasDuplicate = this.checkForDuplicate(palpites);
-    if (hasDuplicate) throw new Error("Possui mais de um palpite por partida");
+    try {
+      const hasDuplicate = this.checkForDuplicate(palpites);
+      if (hasDuplicate) throw new Error("Possui mais de um palpite por partida");
 
-    const apostas = await this.apostaRepository.findByUserId(usuarioId);
+      const apostas = await this
+        .apostaRepository
+        .findByUserIdAndRodada(usuarioId, rodada);
 
-    const hasAlreadyBet = this.checkIfUserAlreadyBet(palpites, apostas);
-    if (hasAlreadyBet) throw new Error("Usuário já apostou em partida");
+      const hasAlreadyBet = this.checkIfUserAlreadyBet(palpites, apostas);
+      if (hasAlreadyBet) throw new Error("Usuário já apostou em partida");
+      
+      const dbRodada = await serviceFactory.rodada().getRodada(rodada);
+      if (dbRodada.status === "encerrada") throw new Error("Rodada encerrada");
 
-    const usuario = await serviceFactory.usuario().getUser(usuarioId);
+      const matchesBelongsToRodada = this
+        .checkIfMatchesBelongToRodada(dbRodada, palpites);
 
-    const apostaPromises = palpites.map((p) => this.createOne(usuario, p));
+      if (!matchesBelongsToRodada) throw new Error("Partida não pertence a rodada");
 
-    return await Promise.all(apostaPromises);
+      const usuario = await serviceFactory.usuario().getUser(usuarioId);
+
+      const apostaPromises = palpites.map((p) => this.createOne(usuario, dbRodada, p));
+
+      return await Promise.all(apostaPromises);
+    } catch(error) {
+      throw new Error(`Falha ao criar apostas: ${error.message}.`)
+    }
   }
 
   private async createOne(
     usuario: Usuario,
+    rodada: Rodada,
     palpite: PalpiteDTO
   ): Promise<Aposta> {
-    const savedBartida = await serviceFactory
+    const savedPartida = await serviceFactory
       .partida()
       .getPartida(palpite.partidaId);
 
-    const aposta = this.apostaFactory(usuario, savedBartida, palpite);
+    const rodadaPartida = savedPartida.rodada.rodada;
+    if (rodadaPartida !== rodada.rodada)
+      throw new Error("Partida não pertence a rodada");
+
+    const aposta = this.apostaFactory(savedPartida, usuario, rodada, palpite);
 
     return await this.apostaRepository.save(aposta);
   }
 
   private apostaFactory(
-    usuario: Usuario,
     partida: Partida,
+    usuario: Usuario,
+    rodada: Rodada,
     palpite: PalpiteDTO
   ): Aposta {
     const aposta = new Aposta();
@@ -59,8 +80,21 @@ export class ApostaService implements IApostaService {
     aposta.usuario = usuario;
     aposta.placarMandante = palpite.placarMandante;
     aposta.placarVisitante = palpite.placarVisitante;
+    aposta.rodada = rodada;
+    aposta.partida = partida;
 
     return aposta;
+  }
+
+  private checkIfMatchesBelongToRodada(
+    rodada: Rodada, palpites: PalpiteDTO[],
+  ): boolean {
+    const { partidas } = rodada;
+    return palpites.every((palpite) => {
+      const hasBet = partidas.every((p) => p.id === palpite.partidaId);
+
+      return hasBet;
+    });
   }
 
   private checkIfUserAlreadyBet(

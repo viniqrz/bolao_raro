@@ -33,7 +33,13 @@ export const start = async () => {
 
     // await serviceFactory.campeonato().updateAllResultsFromApi();
 
-    console.log(await serviceFactory.rodada().getRodadaByNumero(11));
+    await serviceFactory.aposta().createMany(1, 37, [
+      { partidaId: 3057, placarMandante: 1, placarVisitante: 2 },
+      { partidaId: 3058, placarMandante: 1, placarVisitante: 2 },
+    ]);
+
+    // 304
+    // console.log(await serviceFactory.rodada().getRodadaByNumero(11));
 
     console.log("done");
 

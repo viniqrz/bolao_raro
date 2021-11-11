@@ -8,6 +8,6 @@ export class RodadaRepository
   implements IRodadaRepository
 {
   public async findByNumeroRodada(rodada: number): Promise<Rodada> {
-    return await this.findOne({ where: { rodada } });
+    return await this.findOne({ where: { rodada }, relations: ["partidas"] });
   }
 }

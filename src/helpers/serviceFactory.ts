@@ -15,6 +15,9 @@ import { PartidaService } from "../services/PartidaService";
 import { UsuarioRepository } from "../repositories/UsuarioRepository";
 import { UsuarioService } from "../services/UsuarioService";
 
+import { ApostaRepository } from "../repositories/ApostaRepository";
+import { ApostaService } from "../services/ApostaService";
+
 import { APIBrasileirao } from "../clients/brasileirao";
 
 const serviceFactory = {
@@ -54,6 +57,13 @@ const serviceFactory = {
 
     return partidaService;
   },
+
+  aposta(): ApostaService {
+    const apostaRepository = getCustomRepository(ApostaRepository);
+    const apostaService = new ApostaService(apostaRepository);
+
+    return apostaService;
+  }
 };
 
 export { serviceFactory };

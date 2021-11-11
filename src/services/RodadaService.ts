@@ -1,15 +1,16 @@
 import { APIDetalhesRodada, APIRodada } from "../@types/api/brasileirao";
+import { RodadaRepository } from "../repositories/RodadaRepository";
 import { APIBrasileirao } from "../clients/brasileirao";
 import { serviceFactory } from "../helpers/serviceFactory";
 import { Campeonato } from "../models/CampeonatoEntity";
 import { Partida } from "../models/PartidaEntity";
 import { Rodada } from "../models/RodadaEntity";
-import { RodadaRepository } from "../repositories/RodadaRepository";
 
 interface IRodadaService {
   updateOneFromApi(campeonato: Campeonato, rodada: APIRodada): Promise<Rodada>;
   updateAllFromApi(campeonato: Campeonato): Promise<Rodada[]>;
   getRodadasFromApi(campeonato: Campeonato): Promise<APIRodada[]>;
+  getRodada(numero: number): Promise<Rodada>;
   getDetalhesRodadasFromApi(
     campeonato: Campeonato,
     rodadas: APIRodada[]
@@ -49,7 +50,6 @@ export class RodadaService implements IRodadaService {
     const rodada = this.rodadaFactory(campeonato, partidas, rodadaApi);
 
     const savedRodada = await this.repository.findByNumeroRodada(rodada.rodada);
-
     if (!savedRodada) return await this.repository.save(rodada);
 
     return await this.repository.save({ ...savedRodada, ...rodada });
@@ -73,11 +73,8 @@ export class RodadaService implements IRodadaService {
     return await Promise.all(detalhesPromises);
   }
 
-  public async getRodadaByNumero(rodada: number) {
-    return await this.repository.find({
-      where: { campeonato: { idCampeonatoApiExterna: rodada } },
-      relations: ["campeonato"],
-    });
+  public async getRodada(rodada: number): Promise<Rodada> {
+    return await this.repository.findByNumeroRodada(rodada);
   }
 
   private rodadaFactory(
