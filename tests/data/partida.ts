@@ -1,4 +1,10 @@
-import { DUMMY_TEAM_1_DATA, DUMMY_TEAM_2_DATA } from "./time";
+import {
+  DUMMY_TEAM_1_DATA,
+  DUMMY_TEAM_1,
+  DUMMY_TEAM_2_DATA,
+  DUMMY_TEAM_2,
+} from "./time";
+
 import { APIPartida } from "../../src/@types/api/brasileirao";
 import { Partida } from "../../src/models/PartidaEntity";
 
@@ -22,12 +28,14 @@ export const DUMMY_PARTIDA_DATA: APIPartida = {
   time_visitante: DUMMY_TEAM_2_DATA,
 };
 
-const partidaKeys = Object.keys(DUMMY_PARTIDA_DATA);
-
 export const DUMMY_PARTIDA = new Partida();
 
-partidaKeys.forEach((k) => {
-  DUMMY_PARTIDA[k] = DUMMY_PARTIDA_DATA[k] as Array<
-    keyof typeof DUMMY_PARTIDA_DATA
-  >;
-});
+DUMMY_PARTIDA.id = DUMMY_MATCH_ID;
+DUMMY_PARTIDA.status = DUMMY_MATCH_STATUS;
+DUMMY_PARTIDA.placarMandante = DUMMY_PLACAR_MANDANTE;
+DUMMY_PARTIDA.placarVisitante = DUMMY_PLACAR_VISITANTE;
+DUMMY_PARTIDA.dataRealizacao = DUMMY_DATA_ISO;
+DUMMY_PARTIDA.placar = DUMMY_PLACAR;
+DUMMY_PARTIDA.slug = DUMMY_MATCH_SLUG;
+DUMMY_PARTIDA.mandante = DUMMY_TEAM_1;
+DUMMY_PARTIDA.visitante = DUMMY_TEAM_2;

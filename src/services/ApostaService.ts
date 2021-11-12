@@ -24,30 +24,37 @@ export class ApostaService implements IApostaService {
   ): Promise<Aposta[]> {
     try {
       const hasDuplicate = this.checkForDuplicate(palpites);
-      if (hasDuplicate) throw new Error("Possui mais de um palpite por partida");
+      if (hasDuplicate)
+        throw new Error("Possui mais de um palpite por partida");
 
-      const apostas = await this
-        .apostaRepository
-        .findByUserIdAndRodada(usuarioId, rodada);
+      const apostas = await this.apostaRepository.findByUserIdAndRodada(
+        usuarioId,
+        rodada
+      );
 
       const hasAlreadyBet = this.checkIfUserAlreadyBet(palpites, apostas);
       if (hasAlreadyBet) throw new Error("Usuário já apostou em partida");
-      
+
       const dbRodada = await serviceFactory.rodada().getRodada(rodada);
       if (dbRodada.status === "encerrada") throw new Error("Rodada encerrada");
 
-      const matchesBelongsToRodada = this
-        .checkIfMatchesBelongToRodada(dbRodada, palpites);
+      const matchesBelongsToRodada = this.checkIfMatchesBelongToRodada(
+        dbRodada,
+        palpites
+      );
 
-      if (!matchesBelongsToRodada) throw new Error("Partida não pertence a rodada");
+      if (!matchesBelongsToRodada)
+        throw new Error("Partida não pertence a rodada");
 
       const usuario = await serviceFactory.usuario().getUser(usuarioId);
 
-      const apostaPromises = palpites.map((p) => this.createOne(usuario, dbRodada, p));
+      const apostaPromises = palpites.map((p) =>
+        this.createOne(usuario, dbRodada, p)
+      );
 
       return await Promise.all(apostaPromises);
-    } catch(error) {
-      throw new Error(`Falha ao criar apostas: ${error.message}.`)
+    } catch (error) {
+      throw new Error(`Falha ao criar apostas: ${error.message}.`);
     }
   }
 
@@ -59,10 +66,6 @@ export class ApostaService implements IApostaService {
     const savedPartida = await serviceFactory
       .partida()
       .getPartida(palpite.partidaId);
-
-    const rodadaPartida = savedPartida.rodada.rodada;
-    if (rodadaPartida !== rodada.rodada)
-      throw new Error("Partida não pertence a rodada");
 
     const aposta = this.apostaFactory(savedPartida, usuario, rodada, palpite);
 
@@ -87,7 +90,8 @@ export class ApostaService implements IApostaService {
   }
 
   private checkIfMatchesBelongToRodada(
-    rodada: Rodada, palpites: PalpiteDTO[],
+    rodada: Rodada,
+    palpites: PalpiteDTO[]
   ): boolean {
     const { partidas } = rodada;
     return palpites.every((palpite) => {

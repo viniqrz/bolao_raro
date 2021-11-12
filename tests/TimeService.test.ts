@@ -17,8 +17,8 @@ describe("TimeService", () => {
     return Promise.resolve(DUMMY_TEAMS.find((t) => t.nome === nome));
   };
 
-  describe("01 - Atualização dos times", () => {
-    test("Atualiza times", async () => {
+  describe("1.0 - Atualização dos times", () => {
+    test("1.1 - Atualiza times", async () => {
       jest
         .spyOn(CampeonatoClient.prototype, "buscarTabela")
         .mockResolvedValue([DUMMY_API_POSICAO_1, DUMMY_API_POSICAO_2]);

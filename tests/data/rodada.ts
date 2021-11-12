@@ -1,5 +1,5 @@
 import { APIDetalhesRodada } from "../../src/@types/api/brasileirao";
-import { DUMMY_PARTIDA_DATA } from "./partida";
+import { DUMMY_PARTIDA_DATA, DUMMY_PARTIDA } from "./partida";
 import { Rodada } from "../../src/models/RodadaEntity";
 
 const DUMMY_NAME = "Rodada 1";
@@ -23,3 +23,5 @@ export const DUMMY_RODADA = new Rodada();
 rodadaKeys.forEach((k) => {
   DUMMY_RODADA[k] = DUMMY_DATA[k] as Array<keyof typeof DUMMY_DATA>;
 });
+
+DUMMY_RODADA.partidas = [DUMMY_PARTIDA];

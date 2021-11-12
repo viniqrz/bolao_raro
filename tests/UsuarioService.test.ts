@@ -24,8 +24,8 @@ describe("UsuarioService", () => {
     avatarUrl: DUMMY_AVATAR,
   };
 
-  describe("01 - Cadastro de Usuário", () => {
-    test("Cadastra usuário com sucesso", async () => {
+  describe("1.0 - Cadastro de Usuário", () => {
+    test("1.1 - Cadastra usuário com sucesso", async () => {
       jest
         .spyOn(UsuarioRepository.prototype, "findByEmail")
         .mockResolvedValue(null);
@@ -42,7 +42,7 @@ describe("UsuarioService", () => {
       expect(result.nome).toBe(DUMMY_NAME);
     });
 
-    test("Rejeita cadastro com email de formato inválido", async () => {
+    test("1.2 - Rejeita cadastro com email de formato inválido", async () => {
       const repository = new UsuarioRepository();
       const usuarioService = new UsuarioService(repository);
 
@@ -53,7 +53,7 @@ describe("UsuarioService", () => {
       }).rejects.toThrow();
     });
 
-    test("Rejeita cadastro com email já utilizado", async () => {
+    test("1.3 - Rejeita cadastro com email já utilizado", async () => {
       jest
         .spyOn(UsuarioRepository.prototype, "findByEmail")
         .mockResolvedValue(DUMMY_USER);
@@ -67,8 +67,8 @@ describe("UsuarioService", () => {
     });
   });
 
-  describe("02 - Login de Usuário", () => {
-    test("Deve logar com sucesso e receber token JWT", async () => {
+  describe("2.0 - Login de Usuário", () => {
+    test("2.1 - Deve logar com sucesso e receber token JWT", async () => {
       jest
         .spyOn(UsuarioRepository.prototype, "findByEmail")
         .mockResolvedValue(DUMMY_USER);
@@ -93,7 +93,7 @@ describe("UsuarioService", () => {
       expect(typeof result.token).toBe("string");
     });
 
-    test("Nao deve logar com email não registrado", async () => {
+    test("2.2 - Nao deve logar com email não registrado", async () => {
       jest
         .spyOn(UsuarioRepository.prototype, "findByEmail")
         .mockResolvedValue(undefined);
@@ -106,7 +106,7 @@ describe("UsuarioService", () => {
       }).rejects.toThrow();
     });
 
-    test("Nao deve logar com senha incorreta", async () => {
+    test("2.3 - Nao deve logar com senha incorreta", async () => {
       jest
         .spyOn(UsuarioRepository.prototype, "findByEmail")
         .mockResolvedValue(DUMMY_USER);
@@ -123,8 +123,8 @@ describe("UsuarioService", () => {
     });
   });
 
-  describe("03 - Atualização do Cadastro de Usuário", () => {
-    test("Deve atualizar senha e nome com email correto", async () => {
+  describe("3.0 - Atualização do Cadastro de Usuário", () => {
+    test("3.1 - Deve atualizar senha e nome com email correto", async () => {
       // ---- Test Data
       const NEW_PASSWORD = "new-password";
       const NEW_HASHED_PASSWORD = "hashed-password";
@@ -164,7 +164,7 @@ describe("UsuarioService", () => {
       expect(result).toMatchObject(USER_WITHOUT_PASSWORD);
     });
 
-    test("Nao deve atualizar com email incorreto", async () => {
+    test("3.2 - Nao deve atualizar com email incorreto", async () => {
       const WRONG_EMAIL = DUMMY_EMAIL.slice(2, DUMMY_EMAIL.length - 1);
 
       jest
@@ -180,8 +180,8 @@ describe("UsuarioService", () => {
     });
   });
 
-  describe("04 - Inativação do Cadastro de Usuário", () => {
-    test("Deve inativar cadastro", async () => {
+  describe("4.0 - Inativação do Cadastro de Usuário", () => {
+    test("4.1 - Deve inativar cadastro", async () => {
       // ---- Test Data
       const DUMMY_NEW_USER = {
         ...DUMMY_USER,
@@ -214,8 +214,8 @@ describe("UsuarioService", () => {
     });
   });
 
-  describe("05 - Remoção de Usuário", () => {
-    test("Deve deletar o usuário", async () => {
+  describe("5.0 - Remoção de Usuário", () => {
+    test("5.1 - Deve deletar o usuário", async () => {
       const { senha, ...USER_WITHOUT_PASSWORD } = DUMMY_USER;
 
       jest

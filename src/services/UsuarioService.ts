@@ -92,6 +92,7 @@ export class UsuarioService implements IUsuarioService {
     return await this.usuarioRepository.findById(id);
   }
 
+  // Updates user (can also inativate by updating ativo column)
   public async update(
     email: string,
     data: AlterarUsuarioDTO

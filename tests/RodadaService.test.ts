@@ -11,8 +11,8 @@ import { DUMMY_CAMPEONATO } from "./data/campeonato";
 import { DUMMY_PARTIDA } from "./data/partida";
 
 describe("RodadaService", () => {
-  describe("01 - Atualização de rodadas com dados da API", () => {
-    test("Atualiza dados da Rodada a partir da API", async () => {
+  describe("1.0 - Atualização de rodadas com dados da API", () => {
+    test("1.1 - Atualiza dados da Rodada a partir da API", async () => {
       const partidaRepository = new PartidaRepository();
       const partidaService = new PartidaService(partidaRepository);
       const DUMMY_PARTIDAS = [DUMMY_PARTIDA];
