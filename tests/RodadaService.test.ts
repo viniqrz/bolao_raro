@@ -4,7 +4,7 @@ import { CampeonatoClient } from "../src/clients/CampeonatoClient";
 import { PartidaService } from "../src/services/PartidaService";
 import { serviceFactory } from "../src/helpers/serviceFactory";
 import { RodadaService } from "../src/services/RodadaService";
-import { APIRodada } from "../src/@types/api/brasileirao";
+import { APIRodada } from "../src/@types/dtos/api/brasileirao";
 
 import { DUMMY_DATA, DUMMY_RODADA } from "./data/rodada";
 import { DUMMY_CAMPEONATO } from "./data/campeonato";

@@ -5,7 +5,7 @@ import {
   APIDetalhesRodada,
   APIRodada,
   APIPosicaoTabela,
-} from "../@types/api/brasileirao";
+} from "../@types/dtos/api/brasileirao";
 
 const config = {
   headers: {

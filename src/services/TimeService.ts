@@ -1,4 +1,4 @@
-import { APIPosicaoTabela, APITime } from "../@types/api/brasileirao";
+import { APIPosicaoTabela, APITime } from "../@types/dtos/api/brasileirao";
 import { CampeonatoClient } from "../clients/CampeonatoClient";
 import { Time } from "../models/TimeEntity";
 import { ITimeRepository } from "../repositories/ITimeRepository";

@@ -1,6 +1,9 @@
 import * as faker from "faker";
 
-import { APITime, APIPosicaoTabela } from "../../src/@types/api/brasileirao";
+import {
+  APITime,
+  APIPosicaoTabela,
+} from "../../src/@types/dtos/api/brasileirao";
 import { Time } from "../../src/models/TimeEntity";
 
 // ------------------ TEAM DATA ------------------------- //

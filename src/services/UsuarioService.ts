@@ -33,7 +33,7 @@ export class UsuarioService implements IUsuarioService {
 
       const userAlreadyExists = await this.usuarioRepository.findByEmail(email);
 
-      if (userAlreadyExists) throw new Error("Usuario já existe");
+      if (userAlreadyExists) throw new Error("Email já está cadastrado");
 
       const passwordHash = await hash(senha, 8);
       const user = this.factory(data, passwordHash);

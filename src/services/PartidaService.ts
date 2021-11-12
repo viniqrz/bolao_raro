@@ -1,6 +1,6 @@
 import { IPartidaRepository } from "../repositories/IPartidaRepository";
 import { serviceFactory } from "../helpers/serviceFactory";
-import { APIPartida } from "../@types/api/brasileirao";
+import { APIPartida } from "../@types/dtos/api/brasileirao";
 import { Partida } from "../models/PartidaEntity";
 
 interface IPartidaService {

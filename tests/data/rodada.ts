@@ -1,4 +1,4 @@
-import { APIDetalhesRodada } from "../../src/@types/api/brasileirao";
+import { APIDetalhesRodada } from "../../src/@types/dtos/api/brasileirao";
 import { DUMMY_PARTIDA_DATA, DUMMY_PARTIDA } from "./partida";
 import { Rodada } from "../../src/models/RodadaEntity";
 

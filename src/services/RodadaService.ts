@@ -1,4 +1,4 @@
-import { APIDetalhesRodada, APIRodada } from "../@types/api/brasileirao";
+import { APIDetalhesRodada, APIRodada } from "../@types/dtos/api/brasileirao";
 import { RodadaRepository } from "../repositories/RodadaRepository";
 import { CampeonatoClient } from "../clients/CampeonatoClient";
 import { serviceFactory } from "../helpers/serviceFactory";

@@ -5,7 +5,7 @@ import {
   DUMMY_TEAM_2,
 } from "./time";
 
-import { APIPartida } from "../../src/@types/api/brasileirao";
+import { APIPartida } from "../../src/@types/dtos/api/brasileirao";
 import { Partida } from "../../src/models/PartidaEntity";
 
 const DUMMY_MATCH_ID = 121212;
