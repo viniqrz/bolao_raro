@@ -4,24 +4,25 @@ import { Usuario } from "../src/models/UsuarioEntity";
 import { compare, hash } from "bcrypt";
 import { SaveOptions } from "typeorm";
 
-describe("Serviço de Usuario", () => {
+import {
+  DUMMY_USER,
+  DUMMY_NAME,
+  DUMMY_AVATAR,
+  DUMMY_EMAIL,
+  DUMMY_PASSWORD,
+} from "./data/usuario";
+
+describe("UsuarioService", () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
 
-  const DUMMY_NAME = "fulano";
-  const DUMMY_EMAIL = "fulano@gmail.com";
-  const DUMMY_PASSWORD = "12345";
-  const DUMMY_AVATAR =
-    "https://upload.wikimedia.org/wikipedia/pt/8/86/Avatar_Aang.png";
-
-  const DUMMY_USER = new Usuario();
-
-  DUMMY_USER.id = 1212121212121212;
-  DUMMY_USER.nome = DUMMY_NAME;
-  DUMMY_USER.email = DUMMY_EMAIL;
-  DUMMY_USER.senha = DUMMY_PASSWORD;
-  DUMMY_USER.avatarUrl = DUMMY_AVATAR;
+  const credenciais = {
+    nome: DUMMY_NAME,
+    email: DUMMY_EMAIL,
+    senha: DUMMY_PASSWORD,
+    avatarUrl: DUMMY_AVATAR,
+  };
 
   describe("01 - Cadastro de Usuário", () => {
     test("Cadastra usuário com sucesso", async () => {
@@ -36,13 +37,6 @@ describe("Serviço de Usuario", () => {
       const repository = new UsuarioRepository();
       const usuarioService = new UsuarioService(repository);
 
-      const credenciais = {
-        nome: DUMMY_NAME,
-        email: DUMMY_EMAIL,
-        senha: DUMMY_PASSWORD,
-        avatarUrl: DUMMY_AVATAR,
-      };
-
       const result = await usuarioService.create(credenciais);
 
       expect(result.nome).toBe(DUMMY_NAME);
@@ -52,15 +46,10 @@ describe("Serviço de Usuario", () => {
       const repository = new UsuarioRepository();
       const usuarioService = new UsuarioService(repository);
 
-      const credenciais = {
-        nome: DUMMY_NAME,
-        email: DUMMY_EMAIL.slice(0, 1),
-        senha: DUMMY_PASSWORD,
-        avatarUrl: DUMMY_AVATAR,
-      };
+      const altCredenciais = { ...credenciais, email: DUMMY_EMAIL.slice(0, 1) };
 
       await expect(async () => {
-        await usuarioService.create(credenciais);
+        await usuarioService.create(altCredenciais);
       }).rejects.toThrow();
     });
 
@@ -71,13 +60,6 @@ describe("Serviço de Usuario", () => {
 
       const repository = new UsuarioRepository();
       const usuarioService = new UsuarioService(repository);
-
-      const credenciais = {
-        nome: DUMMY_NAME,
-        email: DUMMY_EMAIL,
-        senha: DUMMY_PASSWORD,
-        avatarUrl: DUMMY_AVATAR,
-      };
 
       await expect(async () => {
         await usuarioService.create(credenciais);
@@ -191,13 +173,6 @@ describe("Serviço de Usuario", () => {
 
       const repository = new UsuarioRepository();
       const usuarioService = new UsuarioService(repository);
-
-      const credenciais = {
-        nome: DUMMY_NAME,
-        email: DUMMY_EMAIL,
-        senha: DUMMY_PASSWORD,
-        avatarUrl: DUMMY_AVATAR,
-      };
 
       await expect(async () => {
         await usuarioService.update(WRONG_EMAIL, credenciais);

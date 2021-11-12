@@ -1,6 +1,6 @@
 import { APIDetalhesRodada, APIRodada } from "../@types/api/brasileirao";
 import { RodadaRepository } from "../repositories/RodadaRepository";
-import { APIBrasileirao } from "../clients/brasileirao";
+import { CampeonatoClient } from "../clients/CampeonatoClient";
 import { serviceFactory } from "../helpers/serviceFactory";
 import { Campeonato } from "../models/CampeonatoEntity";
 import { Partida } from "../models/PartidaEntity";
@@ -20,7 +20,7 @@ interface IRodadaService {
 export class RodadaService implements IRodadaService {
   constructor(
     private repository: RodadaRepository,
-    private client: APIBrasileirao
+    private client: CampeonatoClient
   ) {}
 
   public async updateAllFromApi(campeonato: Campeonato): Promise<Rodada[]> {

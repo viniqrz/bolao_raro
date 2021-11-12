@@ -1,5 +1,5 @@
 import { APIPosicaoTabela, APITime } from "../@types/api/brasileirao";
-import { APIBrasileirao } from "../clients/brasileirao";
+import { CampeonatoClient } from "../clients/CampeonatoClient";
 import { Time } from "../models/TimeEntity";
 import { ITimeRepository } from "../repositories/ITimeRepository";
 
@@ -14,7 +14,7 @@ interface ITimeService {
 export class TimeService implements ITimeService {
   constructor(
     private timeRepository: ITimeRepository,
-    private client: APIBrasileirao
+    private client: CampeonatoClient
   ) {}
 
   public async updateAllFromApi(

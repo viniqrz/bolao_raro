@@ -18,10 +18,10 @@ import { UsuarioService } from "../services/UsuarioService";
 import { ApostaRepository } from "../repositories/ApostaRepository";
 import { ApostaService } from "../services/ApostaService";
 
-import { APIBrasileirao } from "../clients/brasileirao";
+import { CampeonatoClient } from "../clients/CampeonatoClient";
 
 const serviceFactory = {
-  client: new APIBrasileirao(),
+  client: new CampeonatoClient(),
 
   usuario(): UsuarioService {
     const usuarioRepository = getCustomRepository(UsuarioRepository);
@@ -63,7 +63,7 @@ const serviceFactory = {
     const apostaService = new ApostaService(apostaRepository);
 
     return apostaService;
-  }
+  },
 };
 
 export { serviceFactory };
